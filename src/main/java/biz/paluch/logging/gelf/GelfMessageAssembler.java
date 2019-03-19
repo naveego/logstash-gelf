@@ -35,8 +35,8 @@ public class GelfMessageAssembler implements HostAndPortProvider {
     private static final int MAX_SHORT_MESSAGE_LENGTH = 250;
     private static final int MAX_PORT_NUMBER = 65535;
     private static final int MAX_MESSAGE_SIZE = Integer.MAX_VALUE;
-    //private static final Set<NamedLogField> SOURCE_FIELDS = EnumSet.of(NamedLogField.SourceClassName,
-       //     NamedLogField.SourceSimpleClassName, NamedLogField.SourceMethodName, NamedLogField.SourceLineNumber);
+    private static final Set<NamedLogField> SOURCE_FIELDS = EnumSet.of(NamedLogField.SourceClassName,
+            NamedLogField.SourceSimpleClassName, NamedLogField.SourceMethodName, NamedLogField.SourceLineNumber);
 
     private String host;
     private String version = GelfMessage.GELF_VERSION;
@@ -153,6 +153,9 @@ public class GelfMessageAssembler implements HostAndPortProvider {
 
             if (!isIncludeLocation() && field instanceof LogMessageField) {
                 LogMessageField messageField = (LogMessageField) field;
+                if (SOURCE_FIELDS.contains(messageField.getNamedLogField())) {
+                    continue;
+                }
             }
 
             Values values = getValues(logEvent, field);

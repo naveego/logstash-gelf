@@ -74,8 +74,6 @@ public class GelfLogAppender extends AppenderSkeleton implements ErrorReporter {
 
         RuntimeContainer.initialize(errorReporter);
         gelfMessageAssembler = new MdcGelfMessageAssembler();
-        gelfMessageAssembler.addFields(LogMessageField.getDefaultMapping(Time, Severity, ThreadName,
-                SourceClassName, SourceMethodName, SourceLineNumber, SourceSimpleClassName, LoggerName, NDC, Server));
     }
 
     @Override
