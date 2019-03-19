@@ -30,13 +30,13 @@ public class GelfMessageAssembler implements HostAndPortProvider {
     public static final String PROPERTY_USE_POOLING = "logstash-gelf.message.pooling";
 
     public static final String FIELD_MESSAGE_PARAM = "MessageParam";
-    public static final String FIELD_STACK_TRACE = "StackTrace";
+    public static final String FIELD_STACK_TRACE = "stacktrace";
 
     private static final int MAX_SHORT_MESSAGE_LENGTH = 250;
     private static final int MAX_PORT_NUMBER = 65535;
     private static final int MAX_MESSAGE_SIZE = Integer.MAX_VALUE;
-    private static final Set<NamedLogField> SOURCE_FIELDS = EnumSet.of(NamedLogField.SourceClassName,
-            NamedLogField.SourceSimpleClassName, NamedLogField.SourceMethodName, NamedLogField.SourceLineNumber);
+    //private static final Set<NamedLogField> SOURCE_FIELDS = EnumSet.of(NamedLogField.SourceClassName,
+       //     NamedLogField.SourceSimpleClassName, NamedLogField.SourceMethodName, NamedLogField.SourceLineNumber);
 
     private String host;
     private String version = GelfMessage.GELF_VERSION;
@@ -152,11 +152,7 @@ public class GelfMessageAssembler implements HostAndPortProvider {
         for (MessageField field : fields) {
 
             if (!isIncludeLocation() && field instanceof LogMessageField) {
-
                 LogMessageField messageField = (LogMessageField) field;
-                if (SOURCE_FIELDS.contains(messageField.getNamedLogField())) {
-                    continue;
-                }
             }
 
             Values values = getValues(logEvent, field);
@@ -173,6 +169,7 @@ public class GelfMessageAssembler implements HostAndPortProvider {
                 builder.withField(entryName, value);
             }
         }
+
 
         if (stackTraceExtraction.isEnabled() && throwable != null) {
             addStackTrace(throwable, builder);
